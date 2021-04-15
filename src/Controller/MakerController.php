@@ -9,8 +9,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MakerController extends AbstractController
 {
+    /**
+     * @Route("/api/ping", name="makers_ping", methods={"GET"})
+     */
+    public function pingMakers(): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(Maker::class);
 
+        $count = $repository->createQueryBuilder('M')
+            ->select('count(M.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
+        return $this->json($count);
+    }
 
     /**
      * @Route("/api/makers", name="makers_list")
