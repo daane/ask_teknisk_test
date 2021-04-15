@@ -32,7 +32,8 @@ class MakerController extends AbstractController
 
         $em = $this->getDoctrine()->getRepository(Maker::class);
 
-        $date = new \DateTimeImmutable();
+        // Bug: The date value was immutable, so the interval was not subtracted
+        $date = new \DateTime();
         $date->sub(new \DateInterval('P3D'));
         $makers = $em->createQueryBuilder('M')
             ->where('M.createdAt > :date ')
