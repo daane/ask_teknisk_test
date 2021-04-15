@@ -16,8 +16,6 @@ class MakerControllerTest extends WebTestCase
         $this->assertTrue(is_numeric($responseData));
         // Assumes that the number of "Maker" entities is known:
         $this->assertEquals(20,$responseData);
-        // I am not quite sure how to write tests that interacts with the DB,
-        // but I can look more into it if it's important
     }
 
     public function testListOfMakersIsOk(): void
@@ -31,5 +29,16 @@ class MakerControllerTest extends WebTestCase
         $crawler = $client->click($linkToMakers);
         $this->assertResponseIsSuccessful();
 
+        $crawler = $client->click($linkToMakers);
+
+        // Confirms that list is not empty:
+        $this->assertGreaterThan(0, $crawler->filter('li')->count());
+
+        /*
+            If the code is tested three days from now it will fail, so it might not be the most ideal solution.
+            A better solution would probably have been to use an empty test database, insert a few entities where some
+            are newer than three days, and verify that the number of list objects is correct.
+            I didn't figure out how to do that, but I can look more into it at a later time.
+        */
     }
 }
